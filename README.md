@@ -4,5 +4,6 @@ Este paquete contiene una serie de tutoriales para aprender R ¡todo en español
 
 Se requiere el uso del paquete learnr, instale learnr mediante: install.packages("learnr")
 
-Tutoriales contenidos:
+Tutoriales contenidos:   
+
 learnr::run_tutorial("1_ManipulacionData", package = "seeRtutoriales")
