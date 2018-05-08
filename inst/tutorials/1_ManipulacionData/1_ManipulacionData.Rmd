@@ -1,0 +1,2245 @@
+---
+title: "Manipulacion de Datos"
+output: 
+  learnr::tutorial:
+    progressive: true
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(openxlsx)
+library(tidyverse)
+library(magrittr)
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+## Preeliminares
+
+El presente tutorial corresponde al curso **Aprendiendo R para Data Science** parte del **Programa de especialización en Data Science**, organizado por la **Sociedad Ecuatoriana de Estadística, SEE**. 
+
+
+```{r ini_s1, echo=FALSE, fig.align='center',  out.width = "400px"}
+   knitr::include_graphics('images/PosterProgDataScienceFB.jpg')
+```
+
+
+Se distribuye bajo licencia Creative Commons CC BY-NC-SA, el código actualizado puede ser descargado actualizado desde el sitio github de Néstor Montaño, miembro de la directiva de la SEE.
+
+
+### Instalacion
+
+El estudiante puede descargar y seguir paso a paso la guía de instalación de R y Rstudio desde [aquí](https://goo.gl/sKH4eY) 
+
+Les presentamos un video explicativo
+![Instalar R y RStudo](https://www.youtube.com/watch?v=1WXgaa2Spp0)
+
+
+### Quiz Inicial 
+
+*Durante las clases se indicaron varias cosas como background a R y RStudio, la siguiente servirá como autoevaluación de lo aprendido*
+
+A continuación se presentan una serie de preguntas de opción múltiple, escoja las casillas correspondientes y de click en Submit Answer
+
+```{r quiz}
+quiz(
+  question("¿R y RStudio son lo mismo?",
+    answer("Sí"),
+    answer("No", correct = TRUE),
+    incorrect = "No son lo mismo, R es el lenguaje de programación y RStudio es una interfaz para interactuar con R"
+  ),
+  question("De entre las siguientes características, escoja todas las que tienen R o RStudio",
+    answer("Open Source", correct = TRUE),
+    answer("Se paga por su uso", message = "- R ES GRATUITO, RStudio tiene una versión gratuita y una de pago"),
+    answer("Fortaleza: Sistema de paquetes", correct = TRUE),
+    answer("RStudio se integra con software de control de versiones", correct = TRUE),
+    answer("La pantalla de RStudio se divide en 2 paneles", message = "- RSTUDIO se divide en 4 paneles: 1. Scripts y Visor 2. Consola, Terminal 3. Objetos e Historial 4. Archivos, Gráficos, Lista de paquetes, Ayuda, etc.")
+  ),
+  question("De entre las siguientes recomendaciones, escoja todas las que considere correctas",
+    answer("Instalar R antes de RStudio", correct = TRUE),
+    answer("Para tener mejor orden usar Proyectos", correct = TRUE),
+    answer("Actualizar R una vez cada año", message = "- R ES GRATUITO, RStudio tiene una versión gratuita y una de pago"),
+    answer("Al empezar a trabajar, abrir R y luego RStudio", message = "- Sólo se requiere abrir RSTUDIO, no R.")
+  )
+)
+```
+
+
+### Operaciones matemáticas
+
+*En R se pueden hacer las operaciones matemáticas comunes*
+
+Otenga el logaritmo natural de $\pi$ elevado al cuadrado sumado a 50, $ln(\pi^2 + 50)$
+
+```{r op_mat_1, exercise=TRUE}
+
+
+```
+
+```{r op_mat_1-hint-1, eval=FALSE}
+# Recordar que logaritmo natural es log, 
+log(... )
+```
+
+```{r op_mat_1-hint-2, eval=FALSE}
+# Recordar que logaritmo natural es log, potencia es ^ y pi es pi 
+log(pi^2)
+```
+
+```{r op_mat_1-hint-3, eval=FALSE}
+# Recordar que logaritmo natural es log, potencia es ^ y pi es pi, lo demás es aritmética
+log(pi^2 + 50)
+```
+
+### Asignación
+
+*R tiene* **expresiones** *(las expresiones se evalúan y se muestra el resultado, como el ejercicio anterior) y también* **asignaciones** *, las cuales evalúan una operación pero el resultado es almacenado a una variables (usando* `<-` *o* `=`*)*
+
+Asigne a una variable llamada `x` el cálculo del ejercicio anterior y luego muestre el valor de `x`
+
+```{r asignacion, exercise=TRUE, exercise.lines = 5}
+
+
+```
+```{r asignacion-hint, eval=FALSE}
+# Asignacion
+x <- log(pi^2 + 50) # Esto se evalua y se guarda en una vairable x
+
+# Mostrar el valor de x
+x  # Esto es una Expresion, por tanto que se evalúa y se muestra el resultado (en este caso el valor de x)
+
+```
+
+
+## Practica: Planteamiento del problema
+
+
+
+El presente tutorial corresponde al curso **Aprendiendo R para Data Science** parte del **Programa de especialización en Data Science**, organizado por la **Sociedad Ecuatoriana de Estadística, SEE**. 
+
+
+```{r ini_s2, fig.align='center', echo=FALSE,  out.width = "400px"}
+   knitr::include_graphics('images/PosterProgDataScienceFB.jpg')
+```
+
+
+Se distribuye bajo licencia Creative Commons CC BY-NC-SA, el código actualizado puede ser descargado actualizado desde el sitio github de Néstor Montaño, miembro de la directiva de la SEE.
+
+
+### Problema
+
+
+La farra S.A. es una empresa dedicada a la venta de bebidas de moderación, ud es contratado para dirigir el departamento de data scientist, por ahora su principal usuario es el departamento de ventas. Sistema le ha pasado en excel una muestra de los datos, su trabajo ahora es analizar la misma para mejorar la venta.
+
+Para resolver este ejercicio utilizaremos el Workflow para un análisis que aprendimos, el cual es tomado del libro [R for Data Science](http://r4ds.had.co.nz/) de Garrett Grolemund y Hadley Wickham
+
+### Worflow de un analisis
+
+
+```{r workflow, fig.align='center', echo=FALSE,  out.width = "400px"}
+   knitr::include_graphics('images/WorkFlow_dataScience.png')
+```
+
+* Import: Obtener y entender los datos para luego importarlos correctamente al software
+* Tidy: Ordenar los datos de tal manera que sea sencillo transformarlos, sumarizarlo, visualizarlos o realizar un modelo con ellos
+* Transform: Manipular los datos hasta obtener el input que el análisis o técnica estadística necesita
+* Visualise: Realizar el análisis exploratorio de datos
+* Model: Aplicar técnicas estadísticas para el entendimiento del problema o tomar decisiones
+* Comunicate: Tratar de mostrar los resultados de tal forma que el resto del mundo los entienda, usando reportes, gráficos, visualizaciones interactivas, integración con herramientas de BI, web apps, etc. 
+
+
+
+
+
+
+## Importar y entender datos
+
+
+El presente tutorial corresponde al curso **Aprendiendo R para Data Science** parte del **Programa de especialización en Data Science**, organizado por la **Sociedad Ecuatoriana de Estadística, SEE**. 
+
+
+```{r ini_im1, echo=FALSE, fig.align='center',  out.width = "400px"}
+   knitr::include_graphics('images/PosterProgDataScienceFB.jpg')
+```
+
+
+Se distribuye bajo licencia Creative Commons CC BY-NC-SA, el código actualizado puede ser descargado actualizado desde el sitio github de Néstor Montaño, miembro de la directiva de la SEE.
+
+
+### Importar y entender la data
+
+*Debe tener instalada el paquete openxlsx para esta parte del tutorial*
+
+Se ha guardado un archivo llamado `datos_licor.xlsx`, en la carpeta `C:/Tuto_RforDS/`. EL archivo consta de 4 hojas: 
+
+* Data_Transacciones: Donde se muestran las transacciones realizadas entre enero y febrero.
+* Data_Clientes: Que contiene edad y sexo del cliente.
+* Data_Locales: Muestra si el local tuvo promotoría en los meses señalados.
+* Data_ContactoCliente: Muestra los números telefónicos de los clientes, en formato vertical como muchos ERP lo muestran.
+
+
+Lea la hoja `Data_Transacciones` del archivo de excel y asígnelo a la variable `data_transacciones`, para ello utilice el comando `read.xlsx` del paquete `openxlsx`. Luego muestre las 5 primeras filas del objeto creado.   
+
+Revise a detalle la tabla mostrada para que entienda la información con la que se cuenta
+
+
+### Importar data principal
+
+```{r import-setup, message=FALSE, warning=FALSE}
+dl_from_dropbox <- function(x, key, outfile) {
+  require(RCurl)
+  bin <- getBinaryURL(paste0("https://dl.dropboxusercontent.com/s/", key, "/", x),
+                      ssl.verifypeer = FALSE)
+  con <- file(outfile, open = "wb")
+  writeBin(bin, con)
+  close(con)        
+}
+
+if( !dir.exists("C:/Tuto_RforDS/") ){ dir.create("C:/Tuto_RforDS/")}
+dl_from_dropbox("datos_licor.xlsx", "og1ujigy7032xw3", 'C:/Tuto_RforDS/datos_licor.xlsx')
+
+```
+
+```{r import, exercise=TRUE}
+
+
+```
+
+
+```{r import-hint-1, eval=FALSE}
+# Cargar el paquete
+library(openxlsx)
+```
+
+```{r import-hint-2, eval=FALSE, message=FALSE, warning=FALSE}
+# Cargar el paquete
+library(openxlsx)
+# Leer el archivo
+data_transacciones <- read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                sheet = "Data_Transacciones")
+```
+
+```{r import-hint-3, eval=FALSE}
+# Cargar el paquete
+library(openxlsx) 
+# Leer el archivo
+data_transacciones <- read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                sheet = "Data_Transacciones")
+# Mostrar cabecera
+head(data_transacciones)
+```
+
+
+
+### Dataframe y tibble
+
+**data.frame**   
+
+* Las componentes son vectores
+* Cada vector puede se de un tipo de dato distinto
+* Cada elemento, columna es una variable
+* Las columnas tienen el mismo largo
+* Un data.frame es como una tabla en una hoja de excel
+* **tibble** es un data.frame mejorado, no convierte strings a factores, no agrega rownames, etc.
+
+El objeto `data_transacciones` contiene los datos de las transacciones, convierta el objeto `data_transacciones` a tibble utilizando el comando `tbl_df` y explore la estructura del archivo utilizando el comando  `str`. No olvide que debe cargar el paquete `tidyverse` antes de empezar.   
+
+Recuerde que al cargar el paquete `tidyverse` está cargando: `ggplot2`, `dplyr`, `tidyr`, `readr`, `purrr`, `tibble`, `stringr` y `forcats`. Más sobre el paquete tidyverse en su [sitio oficial](https://www.tidyverse.org/).
+
+
+```{r str_1-setup, message=FALSE, warning=FALSE}
+# Leer el archivo
+data_transacciones <- read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                sheet = "Data_Transacciones")
+
+```
+
+```{r str_1, exercise=TRUE}
+
+
+```
+
+```{r str_1-hint-1, eval=FALSE}
+# Cargar paquete
+library(tidyverse)
+# Convertir a tibble
+data_transacciones <- tbl_df(data_transacciones)
+```
+
+
+```{r str_1-hint-2, eval=FALSE}
+# Cargar paquete
+library(tidyverse)
+# Convertir a tibble
+data_transacciones <- tbl_df(data_transacciones)
+# Ver la estructura del objeto
+str(data_transacciones)
+```
+
+   
+**Análisis**   
+
+Nótese que:  
+
+* En la columna/variable `PRODUCTO` los nombres tienen varios espacios a la derecha
+* La columna `PRECIO_USD` ha sido leída como texto, encuentre el error.
+* Dependiendo de cómo se hizo la importación, la columna `FECHA_FACTURA` no se importó como fecha (*date*)
+* La columna `CALIF_SERVICIO` ha sido leída como texto, ¿debe ser así?
+
+
+### Importar: 2do round
+
+  
+**Corregir la fecha**   
+
+Para que el paquete `openxlsx` reconozca como fecha a la columna `FECHA_FACTURA` se debe utilizar el parámetro `detectDates = TRUE`. A continuación vuelva a importar corrigiendo la detección de la fecha.
+
+
+
+```{r import_2r, exercise=TRUE}
+
+
+```
+
+
+```{r import_2r-hint-1, eval=FALSE}
+# Leer el archivo
+data_transacciones <- read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                sheet = "Data_Transacciones", 
+                                detectDates = TRUE)
+# Convertir a tibble
+data_transacciones <- tbl_df(data_transacciones)
+# Mostrar cabecera
+str(data_transacciones)
+```
+
+
+
+
+### Entender los datos
+
+Es importante entender los datos para poder realizar los análisis correctos
+
+* ¿Qué representa cada columna?
+* ¿Qué tipo de dato debería tener cada columna?
+* ¿Qué granularidad o atomicidad tiene la data?
+* Si es que se tiene varios conjuntos de datos ¿Cómo se relacionan los datos?
+* A qué periodo de tiempo corresponde la data
+* Muchas veces se obtiene la información desde una base de datos y por tanto toca entender la base y el query que genera los datos
+
+
+*Cada fila representa una línea de la factura, las columnas son los datos del local, cliente, producto, y valores de la venta*
+
+
+
+```{r str_2-setup, message=FALSE, warning=FALSE}
+# Leer el archivo
+data_transacciones <- read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                sheet = "Data_Transacciones", 
+                                detectDates = TRUE)
+# Convertir a tibble
+data_transacciones <- tbl_df(data_transacciones)
+
+```
+
+```{r str_2, eval= TRUE}
+# Mostrar el objeto
+data_transacciones
+
+```
+
+
+
+
+### Importar otras hojas
+
+Importar, convertir a tibble y ver la estructura de las demás hojas y asignarlos a los objetos `data_clientes`, `data_locales` y `data_contactos`. Tómese un momento para entender los datos tal como se hizo anteriormente.
+
+
+```{r import_2-setup, message=FALSE, warning=FALSE}
+# Leer el archivo
+data_transacciones <- read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                sheet = "Data_Transacciones", 
+                                detectDates = TRUE)
+# Convertir a tibble
+data_transacciones <- tbl_df(data_transacciones)
+
+```
+
+```{r import_2, exercise=TRUE}
+
+```
+
+```{r import_2-hint-1, eval=FALSE}
+data_clientes <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                   sheet = "Data_Clientes", 
+                                   detectDates = TRUE))
+data_locales <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                  sheet = "Data_Locales", 
+                                  detectDates = TRUE))
+data_contactos <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                    sheet = "Data_ContactoCliente", 
+                                    detectDates = TRUE))
+
+```
+
+```{r import_2-hint-2, eval=FALSE, message=FALSE, warning=FALSE}
+data_clientes <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                   sheet = "Data_Clientes", 
+                                   detectDates = TRUE))
+data_locales <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                  sheet = "Data_Locales", 
+                                  detectDates = TRUE))
+data_contactos <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                    sheet = "Data_ContactoCliente", 
+                                    detectDates = TRUE))
+str(data_clientes)
+str(data_locales)
+str(data_contactos)
+```
+
+**Note** que la data de contacto tiene varias filas por cada cliente, la granularidad es *cliente-tipo de contacto*, esto será importante para los siguientes pasos.
+
+
+### Crear data en R
+
+
+En R se puede crear directamente vectores, matrices, data.frame, etc. A continuación veremos algunos ejemplos:
+
+
+Para crear un vector se utiliza el comando `c()`
+
+```{r crea_01, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+# Crear el vector (1, 10, 34, 15) y
+# asiganrlo a x
+x <- c(1, 10, 34, 15)
+# Mostrar el vector
+x
+```
+
+
+Sin embargo hay otros comandos que crean vectores, por ejemplo:
+
+```{r crea_02, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+# secuencia de 1 a 10, de 1 en 1,
+# usando dos puntos
+x <- 1:10 
+x
+# Secuencia desde 0 a 20, de 5 en 5 
+# funcion seq()
+x <- seq(from= 0, to= 20, by= 5) 
+x
+# Secuencia desde 0, de 5 en 5, con 4 elementos
+# funcion seq()
+x <- seq(from= 0, by= 5, length.out= 4)
+x
+# repetir 5 veces el número 3
+x <- rep(x= 3, times= 5) 
+x
+```
+
+
+R tiene varias funciones para manejar matrices, por ejemplo:
+
+```{r crea_03, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+# Crear una matriz con los valores del 1 al 4, 
+# ordenados en dos columnas
+m1 <- matrix(1:4, ncol= 2) 
+m1
+# Crear una matriz con los valores del 5 al 11, 
+# ordenados en dos columnas
+m2 <- matrix(5:10, nrow = 3) 
+m2
+```
+
+Nótese que se llenan los valores de forma vertical, si desean llenar de forma horizontal, sería:
+
+```{r crea_04, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+# Crear una matriz con los valores del 1 al 4, 
+# ordenados en dos columnas
+m1 <- matrix(1:4, ncol= 2, byrow = TRUE) 
+m1
+# Crear una matriz con los valores del 5 al 11, 
+# ordenados en dos columnas
+m2 <- matrix(5:10, nrow = 3, byrow = TRUE) 
+m2
+```
+
+Se puede crear data.frame utilizando el comando data.frame (o tibble), por ejemplo:
+
+```{r crea_05, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+df_3  <- data.frame( 
+  Nombre= c('Ana', 'Berni', 'Carlos'), 
+  Edad = c(20,19,20), 
+  Ciudad= factor(c('Gye', 'Uio', 'Cue')) )
+df_3
+
+```
+
+
+### Importar a R: Resumen
+
+
+
+**Importar csv**   
+
+- Desde RStudio  
+  Import Dataset > From Text File > Escoger archivo > Abrir > Escribir nombre a la variable > Import
+- Con comando    
+  `read.csv( file, sep = "," , dec = "," , stringsAsFactors= FALSE)`
+- Para grandes volúmenes de datos usar paquete `data.table`, usar el comando `fread()`   
+
+
+
+**Importar desde excel**   
+
+- Copiando desde un archivo de excel abierto  
+  `read.table("clipboard", sep="\t", header=TRUE)`
+- Desde RStudio  
+  Rstudio > Import Dataset > From Excel > Escoger archivo > Abrir > Escribir nombre a la variable > Import
+- Usando el paquete `openxlsx`  
+  `read.xlsx(xlsxFile , sheet , startRow , colNames , skipEmptyRows, rowNames)`  
+- Otros paquetes  
+  `excel.link`, `XLConnect`, `xlsx`, `readxl`, `rio`  
+
+  
+
+**Exportar a excel**   
+
+- Para **exportar** usando el paquete `openxlsx` se debe descargar [Rtools] (https://cran.r-project.org/bin/windows/Rtools/)
+- Instalar Rtools
+  - Se debe escoger "agregar al path"
+  - Si la computadora ya tiene CYGWIN, se tiene un tratamiento especial
+- Usando el paquete `openxlsx`  
+  `write.xlsx(x, file, asTable = FALSE, ...)`
+- Se puede usar los paquetes `XLConnect`, `xlsx`, entre otros.
+  
+
+
+
+**Importar desde SPSS, SAS, Stata, etc**   
+
+- Desde RStudio  
+  Rstudio > Import Dataset > From SPSS/SAS/STATA
+- Usando el paquete `foreign`  
+  SAS: `read.xport()`  
+  SPSS: `read.spss()`  
+  Stata: `read.dta()`  
+  Soporta otros formatos
+- Usango el paquete `haven`  
+  SAS: `read_sas()` y `read_xpt()`   
+  SPSS: `read_sav()` y `read_por()`  
+  Stata: `read_dta()`   
+- Se puede usar el paquerte `rio`  
+  
+
+
+**Exportar a SPSS, SAS, Stata, etc**   
+
+- Usango el paquete `foreign`    
+  `write.foreign(df, datafile, codefile, package = c("SPSS", "Stata", "SAS"), ...)`
+- Usango el paquete `haven`  
+  SAS: `write_sas()`  
+  SPSS: `write_sav()`  
+  Stata: `write_dta()`  
+- Se puede usar el paquerte `rio`
+
+
+
+**Interacción con Bases de Datos**   
+
+- Utilizando ODBC `RODBC`   
+  (Recomendado para Microsoft SQL)
+- Utilizando JDBC `RJDBC`   
+  (Usa java DBC)
+- Paquetes para bases específicas  
+  `RMySQL`, `ROracle`, `RPostgreSQL`, `RSQLite`, `mongolite`, `RMongo`, `MonetDB.R`, `rmongodb`   
+
+
+ 
+**Otros**   
+
+
+- GIS sistemas de información geográfica con `rgal` y `raster`
+- GoogleSpreadSheets con `googlesheets`
+- Archivos Open Document Spreadsheets con `readODS`
+- JSON data con `rjson` o `jsonlite` o `RJSONIO`
+
+
+
+
+
+## Transform: Manipulacion Basica
+
+
+El presente tutorial corresponde al curso **Aprendiendo R para Data Science** parte del **Programa de especialización en Data Science**, organizado por la **Sociedad Ecuatoriana de Estadística, SEE**. 
+
+
+```{r ini_t, echo=FALSE, fig.align='center',  out.width = "400px"}
+   knitr::include_graphics('images/PosterProgDataScienceFB.jpg')
+```
+
+
+Se distribuye bajo licencia Creative Commons CC BY-NC-SA, el código actualizado puede ser descargado actualizado desde el sitio github de Néstor Montaño, miembro de la directiva de la SEE.
+
+
+
+### Seleccionar columnas: 	select()
+
+
+Con el comando `select()` se puede seleccionan las columnas que se necesitan de un data.frame/tibble, la sintaxis es: `select(data, columnas a seleccionar)`   
+
+Del `data_transacciones` seleccionar las columnas PRODUCTO, LOCAL y VENTA_UND
+
+
+```{r manip_1-setup, message=FALSE, warning=FALSE}
+data_transacciones <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                        sheet = "Data_Transacciones", 
+                                        detectDates = TRUE))
+data_clientes <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                   sheet = "Data_Clientes", 
+                                   detectDates = TRUE))
+data_locales <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                  sheet = "Data_Locales", 
+                                  detectDates = TRUE))
+data_contactos <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                    sheet = "Data_ContactoCliente", 
+                                    detectDates = TRUE))
+
+```
+
+```{r manip_1, exercise=TRUE}
+
+```
+
+```{r manip_1-hint-1, eval=FALSE}
+# Seleccionar las columnas PRODUCTO, LOCAL y VENTA_UND
+# Note que como no se asignó, R evalúa la expresión y presenta el resultado
+select( data_transacciones, PRODUCTO, LOCAL, VENTA_UND) 
+```
+
+
+### Operador Pipe: %>%
+
+El operador Pipe `%>%` del paquete magrittr (parte del tidyverse) permiten que el código sea más legible porque:
+
+* Permite secuencias estructurantes de operaciones de datos de izquierda a derecha: `x %>% f` es equivalente a `f(x)`,
+* Evitando llamadas a funciones anidadas: `x %>% f %>% g %>% h` es equivalente a `h(g(f(x)))`
+* Minimiza la necesidad de variables locales y definiciones de funciones
+* Facilita agregar pasos en cualquier lugar de la programación
+* `%$%` permite seleccionar columas
+
+Del `data_transacciones` seleccionar las columnas PRODUCTO, LOCAL y VENTA_UND, utilice el comando `select()` **y el operador Pipe** `%>%` 
+
+
+```{r manip_2-setup, message=FALSE, warning=FALSE}
+data_transacciones <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                        sheet = "Data_Transacciones", 
+                                        detectDates = TRUE))
+data_clientes <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                   sheet = "Data_Clientes", 
+                                   detectDates = TRUE))
+data_locales <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                  sheet = "Data_Locales", 
+                                  detectDates = TRUE))
+data_contactos <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                    sheet = "Data_ContactoCliente", 
+                                    detectDates = TRUE))
+
+```
+
+```{r manip_2, exercise=TRUE}
+
+```
+
+```{r manip_2-hint-1, eval=FALSE}
+# Se lee, del data_transacciones, selecciona las columnas PRODUCTO, LOCAL y VENTA_UND
+data_transacciones %>% select(PRODUCTO, LOCAL, VENTA_UND) 
+```
+
+### Seleccionar columnas: 	select()
+
+El comando `select()` permite realizar selecciones más elaboradas, como:   
+
+*Seleccionar todas las columnas excepto COD_CLTE*   
+`data_transacciones %>% select( -COD_CLTE)`   
+*Seleccionar todas las columnas cuyo nombre contenga el texto "CL"*   
+`data_transacciones %>% select( contains("CL"))`   
+*Seleccionar todas las columnas cuyo nombre contenga el texto "CL"*   
+`data_transacciones %>% select( contains("CL"))`   
+*Seleccionar todas las columnas cuyo nombre inicie con "P"*   
+`data_transacciones %>% select( starts_with("P"))`   
+*Seleccionar todas las columnas cuyo nombre finalice con "TO"*   
+`data_transacciones %>% select( ends_with("TO"))`   
+ *Seleccionar todas las columnas cuyo nombre contenga una "L" o un "SD" *   
+`data_transacciones %>% select( matches("L|SD"))`   
+
+
+Utilice los ejemplos descritos para practicar el uso del comando `select()`
+
+
+```{r manip_3-setup, message=FALSE, warning=FALSE}
+data_transacciones <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                        sheet = "Data_Transacciones", 
+                                        detectDates = TRUE))
+data_clientes <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                   sheet = "Data_Clientes", 
+                                   detectDates = TRUE))
+data_locales <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                  sheet = "Data_Locales", 
+                                  detectDates = TRUE))
+data_contactos <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                    sheet = "Data_ContactoCliente", 
+                                    detectDates = TRUE))
+
+```
+
+```{r manip_3, exercise=TRUE}
+
+```
+
+
+
+
+### Filtrar/Seleccionar filas: 	filter()
+
+Para filtrar la información según condiciones en el contenido de las variables se utiliza `filter()` en conjunto con los `operadores lógicos` y `operadores de relación`. La sintaxis es: `filter(data, condición(es) a evaluar)`
+
+* Operadores lógicos: **y** `&`, **o**, `|`, **o excluyente** `xor()`
+* Operadores lógicos: **en** `%in%`, **filtros en texto (tipo sql)**, `%like%`
+* Operadores de relación: **Igualdad** `==`, **Desigualdad**, `!=`, **Mayor que** `>`, **Menor igual que** `<=`
+* Comandos del paquete `stringr` para filtros por texto, [sitio oficial](https://github.com/tidyverse/stringr)
+* Recordar que siempre se debe tener cuidado con los valores perdidos `NA` y valores indeterminados `NaN`   
+
+
+Del objeto `data_transacciones` filtrar las transacciones en las que la cantidad de cervezas facturadas sea mayor a 3. 
+
+
+```{r manip_4-setup, message=FALSE, warning=FALSE}
+data_transacciones <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                        sheet = "Data_Transacciones", 
+                                        detectDates = TRUE))
+data_clientes <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                   sheet = "Data_Clientes", 
+                                   detectDates = TRUE))
+data_locales <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                  sheet = "Data_Locales", 
+                                  detectDates = TRUE))
+data_contactos <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                    sheet = "Data_ContactoCliente", 
+                                    detectDates = TRUE))
+
+```
+
+```{r manip_4, exercise=TRUE}
+
+```
+
+
+
+```{r manip_4-hint-1, eval=FALSE}
+# filtrar filas
+data_transacciones %>% 
+  filter(LOCAL== "Ceibos" & ... )
+```
+
+
+```{r manip_4-hint-2, eval=FALSE}
+# filtrar filas
+data_transacciones %>% 
+  filter(LOCAL== "Ceibos" & VENTA_UND>= 3 & ... )
+```
+
+
+```{r manip_4-hint-3, eval=FALSE}
+# filtrar filas
+data_transacciones %>% 
+  filter(LOCAL== "Ceibos" & VENTA_UND>= 3 & str_detect(PRODUCTO, "Pilsener") )
+```
+
+
+
+### Filtrar/Seleccionar filas: 	filter()
+
+Algunos ejemplos del uso de `filter()` 
+
+*Filtrar las transacciones que se hayan efectuado en Ceibos*   
+`data_transacciones %>% filter(LOCAL== "Ceibos")`
+*Filtrar las transacciones que se hayan efectuado en Ceibos y en Enero*   
+`data_transacciones %>% filter(LOCAL== "Ceibos", lubridate::month(FECHA_FACTURA)== 1)`
+`data_transacciones %>% filter(LOCAL== "Ceibos" & lubridate::month(FECHA_FACTURA)== 1)`
+*Filtrar las transacciones que sean de alguna variedad de Pilsener*   
+`data_transacciones %>% filter(str_detect(PRODUCTO, "Pilsener"))`
+
+
+
+Del objeto `data_transacciones` filtrar las transacciones que se hayan efectuado en Ceibos, sean de alguna variedad de Pilsener y la cantidad de cervezas facturadas sea mayor a 3. 
+
+
+```{r manip_4a-setup, message=FALSE, warning=FALSE}
+data_transacciones <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                        sheet = "Data_Transacciones", 
+                                        detectDates = TRUE))
+data_clientes <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                   sheet = "Data_Clientes", 
+                                   detectDates = TRUE))
+data_locales <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                  sheet = "Data_Locales", 
+                                  detectDates = TRUE))
+data_contactos <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                    sheet = "Data_ContactoCliente", 
+                                    detectDates = TRUE))
+
+```
+
+```{r manip_4a, exercise=TRUE}
+
+```
+
+
+
+```{r manip_4a-hint-1, eval=FALSE}
+# filtrar filas
+data_transacciones %>% 
+  filter(LOCAL== "Ceibos" & ... )
+```
+
+
+```{r manip_4a-hint-2, eval=FALSE}
+# filtrar filas
+data_transacciones %>% 
+  filter(LOCAL== "Ceibos" & VENTA_UND>= 3 & ... )
+```
+
+
+```{r manip_4a-hint-3, eval=FALSE}
+# filtrar filas
+data_transacciones %>% 
+  filter(LOCAL== "Ceibos" & VENTA_UND>= 3 & str_detect(PRODUCTO, "Pilsener") )
+```
+
+
+
+
+### Ordenar las filas: 		arrange()
+
+Se puede ordenar las filas según los valores de una o varias columnas utilizando `arrange()`
+
+
+*Ordenar cada Transaccion por la CALIF_SERVICIO (Nótese que el orden es alfabético porque aún falta pasarlo a factor)*   
+`data_transacciones %>% arrange( CALIF_SERVICIO )`   
+*Ordenar para cada Cliente sus lineas de pedido por número de unidades de mayor a menor*    
+`data_transacciones %>% arrange( CLIENTE, desc(VENTA_UND) )`   
+
+
+
+```{r manip_5-setup, message=FALSE, warning=FALSE}
+data_transacciones <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                        sheet = "Data_Transacciones", 
+                                        detectDates = TRUE))
+data_clientes <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                   sheet = "Data_Clientes", 
+                                   detectDates = TRUE))
+data_locales <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                  sheet = "Data_Locales", 
+                                  detectDates = TRUE))
+data_contactos <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                    sheet = "Data_ContactoCliente", 
+                                    detectDates = TRUE))
+
+```
+
+```{r manip_5, exercise=TRUE}
+
+```
+
+
+### Operador Pipe: %>%
+
+Los comandos pueden ser aplicados consecutivamente, usando `%>%`, por ejemplo:    
+
+*Mostrar del objeto `data_transacciones`, ordenadas de mayor a menor por unidades compradas, las ventas que se hayan efectuado en Ceibos y sean de alguna variedad de Pilsener; sólo presente las columnas con el nombre del cliente, producto y unidades de venta*
+```{r manip_6a_a, echo=TRUE, eval= FALSE, message=FALSE, warning=FALSE}
+data_transacciones %>% 
+  filter(LOCAL== "Ceibos"  & str_detect(PRODUCTO, "Pilsener") ) %>% 
+  arrange( desc(VENTA_UND) )  %>% 
+  select( CLIENTE, PRODUCTO, VENTA_UND)
+```
+
+
+Mostrar del objeto `data_transacciones`, las ventas que se hayan efectuado en Samborondon, en Enero, ordenadas por Cliente y sólo presentando las columnas con el nombre del cliente, producto y dólares de venta   
+
+```{r manip_6a-setup, message=FALSE, warning=FALSE}
+data_transacciones <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                        sheet = "Data_Transacciones", 
+                                        detectDates = TRUE))
+data_clientes <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                   sheet = "Data_Clientes", 
+                                   detectDates = TRUE))
+data_locales <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                  sheet = "Data_Locales", 
+                                  detectDates = TRUE))
+data_contactos <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                    sheet = "Data_ContactoCliente", 
+                                    detectDates = TRUE))
+
+```
+
+
+```{r manip_6a, exercise=TRUE}
+
+```
+
+
+### Crear o modificar variables  	
+
+Se pueden crear nuevas columnas en el data.frame usando `mutate`, por ejemplo para crear una columna con el número de mes de la fecha se haria:    
+`data_transacciones %>% mutate(MES= lubridate::month(FECHA_FACTURA))`    
+
+Recordar que mientras no se asigne el nuevo data.frame no será guardada la información, es decir, para modificar el objeto `data_transacciones` deberíamos hacer:    
+`data_transacciones <- data_transacciones %>% mutate(MES= lubridate::month(FECHA_FACTURA))`   
+   
+O en su defecto, utilizar el comando `%<>%` del paquete `magrittr` del `tidyverse`, el `%<>%` significa que se ejecute la parte derecha y se asigne al objeto de la izquierda.   
+`data_transacciones %<>% mutate(MES= lubridate::month(FECHA_FACTURA))`    
+Se pueden crear varias nuevas columnas, por ejemplo:   
+```{r mutate_1a, echo=TRUE, eval= FALSE, message=FALSE, warning=FALSE}
+data_transacciones %<>% 
+  mutate(
+    MES= lubridate::month(FECHA_FACTURA),
+    ANIO= lubridate::year(FECHA_FACTURA)
+    )
+```
+
+
+
+
+
+```{r mutate_1-setup, message=FALSE, warning=FALSE}
+data_transacciones <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                        sheet = "Data_Transacciones", 
+                                        detectDates = TRUE))
+data_clientes <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                   sheet = "Data_Clientes", 
+                                   detectDates = TRUE))
+data_locales <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                  sheet = "Data_Locales", 
+                                  detectDates = TRUE))
+data_contactos <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                    sheet = "Data_ContactoCliente", 
+                                    detectDates = TRUE))
+```
+
+
+Practique el uso de `mutate`, no olvide cargar el paquete `magrittr`
+
+
+```{r mutate_1, exercise=TRUE}
+library(magrittr)
+data_transacciones %<>% 
+  mutate(
+    MES= lubridate::month(FECHA_FACTURA),
+    ANIO= lubridate::year(FECHA_FACTURA)
+    )
+str(data_transacciones)
+head(data_transacciones)
+
+```
+
+
+
+### Corregir data
+
+Empecemos corrigiendo los tipos de datos que detectamos en pasos anteriores:    
+
+* Quitar espacios a la derecha en la columna/variable `PRODUCTO` con `str_trim()`
+* La columna `PRECIO_USD` requiere dos pasos
+  + Cambiar la coma por punto, usaremos `str_replace()` para converir la coma por punto (`pattern = '\\,', replacement = '.'`)
+  + Eliminar $ antes de los números, usaremos `parse_number()` 
+  + También se puede utilizar `parse_number()` con el parámetro `locale = locale(decimal_mark = ",")` que le indica a R que el separador decimal es la coma.
+* Para declarar como factor la variable categórica ordinal `CALIF_SERVICIO` se utiliza  `parse_factor()`
+
+Utilice `mutate` para corregir lo indicado, luego verifique utilizando `str` y `head`
+
+
+```{r mutate_2-setup, message=FALSE, warning=FALSE}
+data_transacciones <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                        sheet = "Data_Transacciones", 
+                                        detectDates = TRUE))
+data_clientes <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                   sheet = "Data_Clientes", 
+                                   detectDates = TRUE))
+data_locales <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                  sheet = "Data_Locales", 
+                                  detectDates = TRUE))
+data_contactos <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                    sheet = "Data_ContactoCliente", 
+                                    detectDates = TRUE))
+```
+
+
+
+```{r mutate_2, exercise=TRUE}
+
+
+
+```
+
+
+
+```{r mutate_2-hint-1, eval=FALSE}
+data_transacciones %<>% mutate(
+  PRODUCTO= str_trim(PRODUCTO),
+  ...
+  ) 
+```
+
+```{r mutate_2-hint-2, eval=FALSE}
+data_transacciones %<>% mutate(
+  PRODUCTO= str_trim(PRODUCTO),
+  #VENTA_USD= parse_number( str_replace(VENTA_USD, pattern = '\\,', replacement = '.')), #OPCION 1
+  VENTA_USD= parse_number( VENTA_USD, locale = locale(decimal_mark = ",")),  #OPCION 2
+  ...
+  ) 
+```
+
+```{r mutate_2-hint-3, eval=FALSE}
+data_transacciones %<>% mutate(
+  PRODUCTO= str_trim(PRODUCTO),
+  #VENTA_USD= parse_number( str_replace(VENTA_USD, pattern = '\\,', replacement = '.')), #OPCION 1
+  VENTA_USD= parse_number( VENTA_USD, locale = locale(decimal_mark = ",")),  #OPCION 2
+  CALIF_SERVICIO= parse_factor( CALIF_SERVICIO, levels= c('Muy Mala', 'Mala', 'Regular', 'Buena', 'Muy Buena'))
+  ) 
+str(data_transacciones)
+head(data_transacciones)
+```
+
+
+### Crear resúmenes con summarise()
+
+```{r summ_0, message=FALSE, warning=FALSE, include=FALSE}
+data_transacciones <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                        sheet = "Data_Transacciones", 
+                                        detectDates = TRUE))
+data_clientes <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                   sheet = "Data_Clientes", 
+                                   detectDates = TRUE))
+data_locales <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                  sheet = "Data_Locales", 
+                                  detectDates = TRUE))
+data_contactos <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                    sheet = "Data_ContactoCliente", 
+                                    detectDates = TRUE))
+data_transacciones %<>% mutate(
+  PRODUCTO= str_trim(PRODUCTO),
+  VENTA_USD= parse_number( VENTA_USD, locale = locale(decimal_mark = ",")),  #OPCION 2
+  CALIF_SERVICIO= parse_factor( CALIF_SERVICIO, levels= c('Muy Mala', 'Mala', 'Regular', 'Buena', 'Muy Buena'))
+  ) 
+```
+
+En ocasiones, se requiere resumir la información en base a otra granularidad, por ejemplo, tenemos la información de cada factura pero necesitamos la información por día, en R - tidyverse estos cálculos se realizan combinando `summarise()` con `group_by()`.  
+   
+El comando `summarise()` (y sus derivados) permiten aplicar funciones a nuestro data.frame, mientras que `group_by()` permite indicar en base a qué se va a dividir los datos y por ende los resultados. Veamos algunos ejemplos   
+
+*Para obtener suma de los dólares vendidos*    
+```{r summ_1, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+# Aqui se crea una tabla con una columna (venta)
+# La cual es igual a la suma de los dolares
+data_transacciones %>% 
+  summarise( VENTA= sum( VENTA_USD, na.rm = TRUE))
+```
+
+Algunos comandos a utilizar en esta sección (el parámetro *na.rm= TRUE* le indica al comando que no considere valores *NA* en los cálculos)   
+
+* `sum( x, na.rm= TRUE)` obtiene la suma de los valores en *x*
+* `n()` este comando es exclusivo del paqute tidyverse, retorna el número de filas
+* `mean( ., na.rm = TRUE)` calcula la media aritmética o promedio simple de los valores en *x*
+* `median( ., na.rm = TRUE)` obtiene la mediana de los valores en *x*
+
+
+
+*Para obtener suma de los dólares vendidos, la cantidad de líneas y suma de las unidades vendidas*    
+```{r summ_2, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+data_transacciones %>% 
+  summarise( 
+    VENTA= sum( VENTA_USD, na.rm = TRUE), 
+    CANTIDAD= n(),
+    UND= sum( VENTA_UND, na.rm = TRUE)
+    )
+```
+
+*Para obtener suma de los dólares vendidos y de las unidades vendidas también se puede utilizar* `summarise_at`, el cual recibe dos parámetros, primero las variables a utilizar y segundo las funciones que se van a aplicar.
+```{r summ_3, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+data_transacciones %>% 
+  summarise_at( vars(VENTA_USD, VENTA_UND), 
+                funs (
+                  SUMA= sum( ., na.rm = TRUE)
+                ))
+```
+
+*Y si deseamos la suma y el promedio* 
+```{r summ_4, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+data_transacciones %>% 
+  summarise_at( vars(VENTA_USD, VENTA_UND), 
+                funs (
+                  SUMA= sum( ., na.rm = TRUE),
+                  MEDIA= mean( ., na.rm = TRUE)
+                ))
+```
+
+
+Pero, normalmente deseamos estos indicadores en función de alguna división en particular, aquí entra el comando `group_by()`, por ejemplo *obtener la suma y el promedio de la venta en dólares y unidades por local*
+
+```{r summ_5, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+# Se lee, del data de transacciones, agrupando por Local
+# calclule la suma y media de la venta en usd y unidades
+data_transacciones %>% 
+  group_by(LOCAL) %>%
+  summarise_at( vars(VENTA_USD, VENTA_UND), 
+                funs (
+                  SUMA= sum( ., na.rm = TRUE),
+                  MEDIA= mean( ., na.rm = TRUE)
+                ))
+```
+
+
+*Ahora por local y mes (atención con el cálculo)*
+```{r summ_6, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+# Nótese que se puede tener cálculos dentro del group by
+data_transacciones %>% 
+  group_by(LOCAL, MES= lubridate::month(FECHA_FACTURA)) %>%
+  summarise_at( vars(VENTA_USD, VENTA_UND), 
+                funs (
+                  SUMA= sum( ., na.rm = TRUE),
+                  MEDIA= mean( ., na.rm = TRUE)
+                ))
+```
+
+
+
+**Ejercicio:** Del data de transacciones, muestre los dólares totales y el costo total de la venta que se tiene por cada tipo de cerveza y local.
+
+
+```{r import_2_set, message=FALSE, warning=FALSE, include=FALSE}
+data_transacciones <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                        sheet = "Data_Transacciones", 
+                                        detectDates = TRUE))
+data_clientes <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                   sheet = "Data_Clientes", 
+                                   detectDates = TRUE))
+data_locales <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                  sheet = "Data_Locales", 
+                                  detectDates = TRUE))
+data_contactos <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                    sheet = "Data_ContactoCliente", 
+                                    detectDates = TRUE))
+data_transacciones %<>% mutate(
+  PRODUCTO= str_trim(PRODUCTO),
+  VENTA_USD= parse_number( VENTA_USD, locale = locale(decimal_mark = ",")),  #OPCION 2
+  CALIF_SERVICIO= parse_factor( CALIF_SERVICIO, levels= c('Muy Mala', 'Mala', 'Regular', 'Buena', 'Muy Buena'))
+  ) 
+```
+
+```{r summ_ex1, exercise.setup= "import_2_set", exercise=TRUE}
+
+
+
+```
+
+
+
+
+```{r summ_ex1-hint-1, eval=FALSE}
+data_transacciones %>% 
+  group_by(LOCAL, PRODUCTO) %>%
+  summarise_at( vars(VENTA_USD, VENTA_COSTO), 
+                funs (
+                  SUMA= sum( ., na.rm = TRUE)
+                ))
+```
+
+
+### Crear resúmenes con summarise()
+ 
+Resaltar que se puede mezclar los comandos en el orden que se desee para obtener los resultados deseados, por ejemplo:   
+ 
+*Para obtener la suma de los dólares vendidos, la cantidad de líneas y suma de las unidades vendidas para cada local y producto de pilsener se haría*    
+```{r summ_7, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+# Se lee: Del data de transacciones 
+# filtra las filas que contengan Pilsener
+# y agrupando por local y producto 
+# calcula la suma de venta, unidades y cuenta lineas
+data_transacciones %>% 
+  filter(str_detect(PRODUCTO, "Pilsener")) %>% 
+  group_by(LOCAL, PRODUCTO) %>%
+  summarise( 
+    VENTA= sum( VENTA_USD, na.rm = TRUE), 
+    CANTIDAD= n(),
+    UND= sum( VENTA_UND, na.rm = TRUE)
+    )
+```
+
+
+**Ejercicio:** Del data de transacciones, muestre los dólares totales y el costo total de la venta que se tiene por cada tipo de cerveza y local, pero deje sólo las combinaciones de cerveza-local cuyo valor sea al menos $50.
+
+
+
+```{r summ_ex2, exercise.setup= "import_2_set", exercise=TRUE}
+
+
+
+```
+
+
+
+
+```{r summ_ex2-hint-1, eval=FALSE}
+# Tenemos que filtrar el resultado
+data_transacciones %>% 
+  group_by(LOCAL, PRODUCTO) %>%
+  summarise_at( vars(VENTA_USD, VENTA_COSTO), 
+                funs (
+                  SUMA= sum( ., na.rm = TRUE)
+                )) %>%
+  filter(...)
+```
+
+
+
+```{r summ_ex2-hint-2, eval=FALSE}
+# Tenemos que filtrar el resultado
+# La columna VENTA_USD_SUMA
+data_transacciones %>% 
+  group_by(LOCAL, PRODUCTO) %>%
+  summarise_at( vars(VENTA_USD, VENTA_COSTO), 
+                funs (
+                  SUMA= sum( ., na.rm = TRUE)
+                )) %>%
+  filter(VENTA_USD_SUMA >= 50)
+```
+
+
+## Tidy: Ordenar dato 
+
+
+El presente tutorial corresponde al curso **Aprendiendo R para Data Science** parte del **Programa de especialización en Data Science**, organizado por la **Sociedad Ecuatoriana de Estadística, SEE**. 
+
+
+```{r ini_ti1, echo=FALSE, fig.align='center',  out.width = "400px"}
+   knitr::include_graphics('images/PosterProgDataScienceFB.jpg')
+```
+
+
+Se distribuye bajo licencia Creative Commons CC BY-NC-SA, el código actualizado puede ser descargado actualizado desde el sitio github de Néstor Montaño, miembro de la directiva de la SEE.
+
+
+### Entendiendo el problema
+
+
+
+Suponga que se quiere evaluar los casos de cierta enfermedad en un conjunto de países, nosotros normalmente deseamos tener los datos de esta manera:
+
+```{r tidy_01, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+table1
+```
+
+
+Sin embargo los datos podrían estar así
+```{r tidy_02, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+table2
+```
+
+
+o así 
+```{r tidy_03, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+table3
+```
+
+
+o así 
+```{r tidy_04, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+table4a
+```
+
+
+o incluso así
+```{r tidy_05, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+table4b
+```
+
+
+### Data ordenada
+
+En la mayoría de los casos, **antes de realizar nuestros análisis debemos reordenar los datos**, esto lo hacemos en usando por ejemplo las tablas dinámicas de excel o manualmente en cualquier hoja de cálculo. Al final lo que se desea es que los datos cumplan lo siguiente:
+
+- Que cada columna sea una variable
+- Que cada fila sea una observación (granularidad)
+- Que cada celda sea el valor de la variable para la observación
+
+```{r, fig.align='center', echo=FALSE,  out.width = "500px"}
+   knitr::include_graphics('images/tidy-1.png')
+```
+
+
+Un ejemplo de un set de datos ordenados y listo para analizar es el conjunto `table1`, en el que se puede ver que la granularidad de la información es País, Año, mientras que las variables son: Casos y Población.
+
+```{r tidy_06, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+table1
+```
+
+
+Los **datos ordenados** nos permiten trabajar fácilmente con ellos, por ejemplo:
+
+*Calcular un ratio por cada 10 mil habitantes*
+```{r tidy_07, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+# Calcular un ratio por cada 10 mil habitantes
+table1 %>% 
+  mutate(rate = cases / population * 10000) 
+```
+
+
+*Calcular casos por año*
+```{r tidy_08, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+# Calcular casos por año
+table1 %>% 
+  count(year, wt = cases)
+```
+
+
+Imagine realizar esos cálculos con los otros set de datos, los cuales a pesar de que tienen la misma información, no están ordenados.
+
+
+
+### De fila a columna con Spread
+
+El comando `Spread` se usa cuando una observación está en diferentes filas, veamos el data.frame `table2`
+
+```{r tidy_09, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+table2 
+```
+
+Se desea convertir el data.frame `table2` a un data.frame ordenado (como `table1`), para esto se usa el comando `spread()` identificando lo siguiente:
+
+- ¿Qué columna tiene los nombres de las columnas? *La columna: type*   
+- ¿Qué columna contiene los valores observados? *La columna: count*
+
+
+Entonces, para pasar de `table2` a `table1` se haría lo siguiente:
+
+```{r tidy_10, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE} 
+# Aplicar spread a table2
+spread(table2, key = type, value = count)
+```
+
+
+`spread()` transforma el `key` en columnas y el `value` en el valor de la observación
+
+
+```{r, fig.align='center', echo=FALSE,  out.width = "500px"}
+   knitr::include_graphics('images/Spread.png')
+```
+
+
+
+### De columna a fila con Gather
+
+El comando `Gather` se usa cuando se tiene datos parecidos a tablas cruzadas, veamos el data.frame `table4a`
+
+```{r tidy_11, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+table4a
+```
+
+
+Se desea convertir el data.frame `table4a` a un data.frame ordenado (como `table1`), para esto se usa el comando `gather()` identificando lo siguiente:
+
+¿Qué variables parece que se están cruzando en el table4a? **País y Año**    
+¿Qué valor ha tomado como dato para la tabla cruzada? **Los Casos**
+
+
+Entonces para pasar de `table4a` a `table1` se haría lo siguiente:
+
+```{r tidy_12, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+table4a %>% 
+  gather('1999', '2000', key = "year", value = "cases")
+```
+
+`gather()` transforma los nombres de columnas dados en una nueva columna de nombre `key` y los valores de las celdas pasan a la columna con nombre `value`.
+
+
+```{r, fig.align='center', echo=FALSE,  out.width = "500px"}
+   knitr::include_graphics('images/Gather.png')
+```
+
+
+
+### Cortar columnas con Separate()
+
+`Separate()` permite disociar alguna columna que esté concatenada, veamos el data.frame `table3`
+
+```{r tidy_13, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+table3
+```
+
+
+¿Qué columna parece estar concatenada? **La columna: rate**   
+
+
+Entonces para pasar de `table3` a `table1` se haría lo siguiente:
+
+
+```{r tidy_14, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+table3 %>% 
+  separate(rate, into = c("cases", "population"), sep = "/")
+```
+
+
+Con convert= TRUE se transforma a número (nótese el tipo que se muestra debajo de cada nombre de columna)
+
+```{r tidy_15, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+table3 %>% 
+  separate(rate, into = c("cases", "population"), sep = "/", convert = TRUE)
+```
+
+
+
+### Llenar vacíos
+
+Cuando nos pasan información procedentes de tablas dinámicas puede pasar que se nombra el primer valor y lo de abajo se asume es lo mismo
+
+```{r tidy_16, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+treatment <- tribble(
+  ~ person,           ~ treatment, ~response,
+  "Derrick Whitmore", 1,           7,
+  NA,                 2,           10,
+  NA,                 3,           9,
+  "Katherine Burke",  1,           4
+)
+treatment
+```
+
+
+Con `fill` se pueden llenar los NA, por ejemplo:
+
+```{r tidy_17, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+treatment %>% 
+  fill(person)
+```
+
+
+
+### Ordenar la data de nuestro ejemplo
+
+Nosotros hemos importado 4 sets de datos (al inicio del tutorial), recordemos que el archivo tenía 4 hojas: 
+
+* Data_Transacciones: Donde se muestran las transacciones realizadas entre enero y febrero.
+* Data_Clientes: Que contiene edad y sexo del cliente.
+* Data_Locales: Muestra si el local tuvo promotoría en los meses señalados.
+* Data_ContactoCliente: Muestra los números telefónicos de los clientes, en formato vertical como muchos ERP lo muestran.
+
+
+Pensemos en las siguientes preguntas.
+* *¿Los hombes gastan más que las mujeres?* Para responder esto deberíamos unir la data de transacciones con la información de los clientes
+* *¿Hay alguna relación entre tener promotoría y la venta?* Aquí deberíamos unir la data de transacciones con la de los locales, nótese que para esta unión hay que considerar el local y la fecha
+* *Queremos el top 10 de clientes con sus datos para llamarlos o escribirles para una promoción puntual.* Para esto necesitamos unir la data de transacciones con la de contacto, esta unión debería ser por el código de cliente.
+
+
+En base a las preguntas anteriores, **¡revisemos si algún data.frame requiere transformación!**
+
+
+#### Transacciones
+
+```{r tidy_ej_01, echo=TRUE, message=FALSE, warning=FALSE, paged.print= TRUE}
+
+data_transacciones
+
+```
+
+#### Locales
+```{r tidy_ej_02, echo=TRUE, message=FALSE, warning=FALSE, paged.print= TRUE}
+
+data_locales
+
+```
+
+#### Clientes
+```{r tidy_ej_03, echo=TRUE, message=FALSE, warning=FALSE, paged.print= TRUE}
+
+data_clientes
+
+```
+
+#### Contactos
+```{r tidy_ej_04, echo=TRUE, message=FALSE, warning=FALSE, paged.print= TRUE}
+
+data_contactos
+
+```
+
+```{r quiz_tidy}
+quiz(
+  question("¿Qué data.frame requiere ser ordenado?",
+    answer("Transacciones", message = "El data.frame de transacciones parece estar ordenado, cada fila representa una línea de la factura, cada columna representa un campo de la factura"),
+    answer("Locales", message = "El data.frame de transacciones parece estar ordenado, cada fila indica si en el mes dado hubo o no promotoría, se uniría con la data de transacciones utilizando la fecha y el local"),
+    answer("Clientes", message = "El data.frame de clientes parece estar ordenado, cada fila representa los datos demográficos del cliente, se uniría con las transacciones usando el código de cliente"),
+    answer("Contactos", correct = TRUE, message = "El data.frame de contactos tiene granularidad a nivel de [cliente]-[tipo de contacto], sin embargo los análisis normalmente se realizan por cliente o por producto, por lo que deberíamos ordenar este data.frame para que su granularidad sea a nivel de cliente.")
+  )
+)
+```
+
+
+### Ordenar data de contactos
+
+**¿Qué data.frame requiere ser ordenado?**
+
+Como se vió luego de nuestro análisis:   
+
+* El data.frame de transacciones parece estar ordenado, cada fila representa una línea de la factura, cada columna representa un campo de la factura
+* El data.frame de transacciones parece estar ordenado, cada fila indica si en el mes dado hubo o no promotoría, se uniría con la data de transacciones utilizando la fecha y el local
+* El data.frame de clientes parece estar ordenado, cada fila representa los datos demográficos del cliente, se uniría con las transacciones usando el código de cliente
+* El data.frame de contactos tiene granularidad a nivel de [cliente]-[tipo de contacto], sin embargo los análisis normalmente se realizan por cliente o por producto, por lo que deberíamos ordenar este data.frame para que su granularidad sea a nivel de cliente. 
+
+
+
+Ordene el `data_contactos` utilizando alguno de los comandos utilizados anteriormente
+```{r tidy_ex1, exercise.setup= "import_2_set", exercise=TRUE}
+
+
+
+```
+
+
+
+
+```{r tidy_ex1-hint-1, eval=FALSE}
+# Se usa spread porque hay que pasar de
+# fila a columnas, recordar usar %<>% 
+data_contactos %<>% 
+  spread( key = "TIPO.DE.CONTACTO", value = CONTACTO)
+```
+
+
+
+
+### Más usos
+
+
+Ahora, vamos a aplicar los comandos aprendidos para pasar de esto:
+
+```{r tidy3_01, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+# Nótese que se puede tener cálculos dentro del group by
+data_transacciones %>% 
+  summarise_at( vars(VENTA_USD, VENTA_UND), 
+                funs (
+                  SUMA= sum( ., na.rm = TRUE),
+                  MEDIA= mean( ., na.rm = TRUE)
+                ))
+```
+
+a esto
+
+```{r tidy3_02, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+data_transacciones %>% 
+  rename(VENTA.USD= VENTA_USD, VENTA.UND= VENTA_UND) %>%
+  summarise_at( vars(VENTA.USD, VENTA.UND), 
+                funs (
+                  SUMA= sum( ., na.rm = TRUE),
+                  MEDIA= mean( ., na.rm = TRUE)
+                )) %>%
+  gather(key = "Nombre", value = "Valor") %>%
+  separate(Nombre, c("Var","Medida"), sep = "_") %>% 
+  spread(Medida, Valor)
+```
+#### Pasos
+
+Primero vamos a renombrar las columnas, esto se lo realiza con el comando `rename()`, este paso es importante porque luego vamos a tener que usar separate y podemos tener problemas con los **"_"**
+
+```{r tidy3_03, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+data_transacciones %>% 
+  rename(VENTA.USD= VENTA_USD, VENTA.UND= VENTA_UND) %>%
+  summarise_at( vars(VENTA.USD, VENTA.UND), 
+                funs (
+                  SUMA= sum( ., na.rm = TRUE),
+                  MEDIA= mean( ., na.rm = TRUE)
+                ))
+```
+
+Tenemos valores en columnas, pero nosotros queremos que el nombre de la variable esté como fila, entonces hay que usar `gather()`, le daremos a la columna de variables el nombre de "Var_Medida" y a la columna de valores el nombre "Valor".
+
+```{r tidy3_04, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+data_transacciones %>% 
+  rename(VENTA.USD= VENTA_USD, VENTA.UND= VENTA_UND) %>%
+  summarise_at( vars(VENTA.USD, VENTA.UND), 
+                funs (
+                  SUMA= sum( ., na.rm = TRUE),
+                  MEDIA= mean( ., na.rm = TRUE)
+                )) %>%
+  gather(key = "Var_Medida", value = "Valor")
+```
+
+
+Ahora procedemos a separar la columna "Var_Medida" en dos, una con los nombres de la variable y otra con la medida o cálculo que se hizo, usamos `separate()`
+
+```{r tidy3_05, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+data_transacciones %>% 
+  rename(VENTA.USD= VENTA_USD, VENTA.UND= VENTA_UND) %>%
+  summarise_at( vars(VENTA.USD, VENTA.UND), 
+                funs (
+                  SUMA= sum( ., na.rm = TRUE),
+                  MEDIA= mean( ., na.rm = TRUE)
+                )) %>%
+  gather(key = "Var_Medida", value = "Valor") %>%
+  separate(Var_Medida, c("Var","Medida"), sep = "_")
+```
+
+Finalmente, se puede ver que los valores de la columna *Medida* debe pasar a ser nombres de columna, entonces se debe usar `spread()`
+
+```{r tidy3_06, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+data_transacciones %>% 
+  rename(VENTA.USD= VENTA_USD, VENTA.UND= VENTA_UND) %>%
+  summarise_at( vars(VENTA.USD, VENTA.UND), 
+                funs (
+                  SUMA= sum( ., na.rm = TRUE),
+                  MEDIA= mean( ., na.rm = TRUE)
+                )) %>%
+  gather(key = "Var_Medida", value = "Valor") %>%
+  separate(Var_Medida, c("Var","Medida"), sep = "_") %>% 
+  spread(Medida, Valor)
+```
+
+
+
+**Ejercicio**   
+
+Obtenga la siguiente tabla (Considere utilidad como la resta de la venta en dólares y el costo de venta)
+
+```{r tidy3_07, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+data_transacciones %>% 
+  mutate(UTILIDAD= VENTA_USD - VENTA_COSTO) %>%
+  rename(VENTA.USD= VENTA_USD, VENTA.COSTO= VENTA_COSTO) %>%
+  summarise_at( vars(VENTA.USD, VENTA.COSTO, UTILIDAD), 
+                funs (
+                  SUMA= sum( ., na.rm = TRUE),
+                  MEDIA= mean( ., na.rm = TRUE)
+                )) %>%
+  gather(key = "Var_Medida", value = "Valor") %>%
+  separate(Var_Medida, c("Var","Medida"), sep = "_") %>% 
+  spread(Medida, Valor)
+```
+
+```{r tidy_ex2, exercise.setup= "import_2_set", exercise=TRUE}
+
+
+
+```
+
+
+
+
+```{r tidy_ex2-hint-1, eval=FALSE}
+# Debe empezar calculando la nueva columna
+data_transacciones %>% 
+  mutate(UTILIDAD= VENTA_USD - VENTA_COSTO) %>%
+  ...
+
+```
+
+
+```{r tidy_ex2-hint-2, eval=FALSE}
+# Debe empezar calculando la nueva columna
+# Luego son los mismos pasos, ojo con nombre de variables.
+data_transacciones %>% 
+  mutate(UTILIDAD= VENTA_USD - VENTA_COSTO) %>%
+  rename(VENTA.USD= VENTA_USD, VENTA.COSTO= VENTA_COSTO) %>%
+  summarise_at( vars(VENTA.USD, VENTA.COSTO, UTILIDAD), 
+                funs (
+                  SUMA= sum( ., na.rm = TRUE),
+                  MEDIA= mean( ., na.rm = TRUE)
+                )) %>%
+  gather(key = "Var_Medida", value = "Valor") %>%
+  separate(Var_Medida, c("Var","Medida"), sep = "_") %>% 
+  spread(Medida, Valor)
+
+```
+
+
+
+### Y algo más
+
+
+Ahora queremos pasar de esto
+
+```{r tidy4_01, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+# Nótese que se puede tener cálculos dentro del group by
+data_transacciones %>% 
+  group_by(LOCAL, MES= lubridate::month(FECHA_FACTURA)) %>%
+  summarise_at( vars(VENTA_USD, VENTA_UND), 
+                funs (
+                  SUMA= sum( ., na.rm = TRUE),
+                  MEDIA= mean( ., na.rm = TRUE)
+                ))
+```
+
+A esto 
+
+```{r tidy4_02, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+data_transacciones %>% 
+  rename(VENTA.USD= VENTA_USD, VENTA.UND= VENTA_UND) %>%
+  group_by(LOCAL, MES= lubridate::month(FECHA_FACTURA)) %>%
+  summarise_at( vars(VENTA.USD, VENTA.UND), 
+                funs (
+                  SUMA= sum( ., na.rm = TRUE),
+                  MEDIA= mean( ., na.rm = TRUE)
+                )) %>%
+  gather(key = "Nombre", value = "Valor", -c(LOCAL, MES)) %>%
+  #gather(key = "Variable", value = "Valor",VENTA.USD_SUMA, VENTA.UND_SUMA, 
+  #                                         VENTA.USD_MEDIA, VENTA.UND_MEDIA )
+  separate(Nombre, c("Var","Medida"), sep = "_") %>% 
+  spread(Medida, Valor) %>%
+  arrange(Var, LOCAL, MES)
+```
+
+Este ejercicio versus el anterior tiene básicamente un cambio: que ahora tenemos los cálculos realizados para cada Local y Mes, esto implica dos cambios en el código:   
+
+* Se debe hacer el group_by() por Local y Mes
+* Al hacer el gather, se debe especificar las columnas a utilizar, esto se lo puede hacer de dos maneras
+  + Escribiendo todas las columnas a usar: `gather(key = "Variable", value = "Valor",VENTA.USD_SUMA, VENTA.UND_SUMA, VENTA.USD_MEDIA, VENTA.UND_MEDIA )`
+  + Restando las columna que no se usarán: `gather(key = "Nombre", value = "Valor", -c(LOCAL, MES))`
+* Por último, se puede ver que la data está ordenada.
+
+
+Obtenga la tabla indicada.
+
+```{r tidy_ex3, exercise.setup= "import_2_set", exercise=TRUE}
+
+
+
+```
+
+
+```{r tidy_ex3-hint-1, eval=FALSE}
+data_transacciones %>% 
+  rename(VENTA.USD= VENTA_USD, VENTA.UND= VENTA_UND) %>%
+  group_by(LOCAL, MES= lubridate::month(FECHA_FACTURA)) %>%
+  summarise_at( vars(VENTA.USD, VENTA.UND), 
+                funs (
+                  SUMA= sum( ., na.rm = TRUE),
+                  MEDIA= mean( ., na.rm = TRUE)
+                )) %>%
+  gather(key = "Nombre", value = "Valor", -c(LOCAL, MES)) %>%
+  #gather(key = "Variable", value = "Valor",VENTA.USD_SUMA, VENTA.UND_SUMA,   
+  #                                         VENTA.USD_MEDIA, VENTA.UND_MEDIA )
+  separate(Nombre, c("Var","Medida"), sep = "_") %>% 
+  spread(Medida, Valor) %>%
+  arrange(Var, LOCAL, MES)
+```
+
+  
+  
+
+
+
+
+## Transform: Unir datos
+
+
+### Introducción
+
+EN muchas ocasiones se tiene varios archivos o varios set de datos que deben ser unidos antes de realizar nuestros análisis, en la presente sección vamos a explorar las diferentes alternativas para unir datos.   
+
+Empecemos creando tres data.frame para esta sección
+
+```{r unir_01, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+# Crear un Data frame
+df_1  <- data.frame( 
+  Nombre= c('Ana', 'Berni', 'Carlos', 'Daniel', 'Ericka'), 
+  Edad = c(20,19,20,19,18), 
+  Ciudad= factor(c('Gye', 'Uio', 'Cue', 'Gye', 'Cue')) )
+df_1
+```
+
+
+
+```{r unir_02, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+# Crear  un Data frame
+df_2  <- data.frame( 
+  Nombre= c('Fulton', 'Gilda'), 
+  Ciudad= factor(c('Mach', 'Gye')) ,
+  Edad = c(21,18) 
+  )
+df_2
+```
+
+
+
+
+```{r unir_03, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+# Crear  un Data frame
+df_3  <- data.frame( 
+  Estado_Civil= c('S', 'D', "S", "C", "D")
+  )
+df_3
+```
+
+
+
+### Unir filas o columnas
+
+Para unir filas se usa `bind_rows` del paquete dplyr (tidyverse), también se podría utilizar `rbind` que es el comando de la base de R pero algo más limitado.   
+
+Se va a unir el df_1 con el df_2, note los *warning* que se generan que indican que la columna de tipo factor fueros cambiadas a carácter.
+
+```{r unefila_01, echo=TRUE, message=FALSE, warning=TRUE, paged.print=FALSE}
+# Aumentar filas
+bind_rows(df_1, df_2)
+```
+
+
+Ahora, veremos lo que hace el comando si se quiere unir data.frames con diferente columnas
+
+```{r unefila_02, echo=TRUE, message=FALSE, warning=TRUE, paged.print=FALSE}
+# Aumentar filas
+bind_rows(df_1, df_3)
+# rbind(df_1, df_3) #ERROR
+```
+
+
+Se puede aumentar columna que indique el origen de la fila, nótese que se envía los data.frame en una lista.
+```{r unefila_03, echo=TRUE, message=FALSE, warning=TRUE, paged.print=FALSE}
+# Aumentar columna que indica origen de la fila
+bind_rows(list(df_1, df_2), .id = "id")
+```
+
+Por default va a salir el número del data.frame, pero si nombramos la lista  `list(df_1= df_1...` se puede tener el nombre que se desee. Además, se pueden unir varios data.frame.
+
+```{r unefila_04, echo=TRUE, message=FALSE, warning=TRUE, paged.print=FALSE}
+# Aumentar columna que indica origen de la fila
+bind_rows(list(df_1= df_1, df_2= df_2, df_3= df_3), .id = "DF_ORIGEN")
+```
+
+
+
+Para unir columnas se usa `bind_cols`, considerar que se requiere que los datos tengan el mismo largo   
+
+```{r unecol_01, echo=TRUE, message=FALSE, warning=TRUE, paged.print=FALSE}
+# Bind más de dos dataframes
+bind_cols(df_1, df_3)
+```
+
+
+**Ejercicio** Obtenga la siguiente tabla.
+
+```{r unefila_05, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+# Bind más de dos dataframes
+bind_rows(list(df_1er= df_1, df_2do= df_2, df_3er= df_3), .id = "DF_ORIGEN")
+```
+
+
+```{r unefila_ex01, exercise.setup= "import_2_set", exercise=TRUE}
+
+
+
+```
+
+
+```{r unefila_ex01-hint-1, eval=FALSE}
+# Bind más de dos dataframes
+bind_rows(list(df_1er= df_1, df_2do= df_2, df_3er= df_3), .id = "DF_ORIGEN")
+
+```
+
+
+
+
+
+
+### Merge|Join|Buscarv
+
+En la sección anterior sólo se agregó un set, uno debajo (o a lado) de otro, sin embargo en la mayoría de ocasiones lo que se requiere es hacer esta unión teniendo alguna columna como identificador, entonces:   
+
+- Se tienen dos data.frames con columnas o variables que hacen las veces de “key” o “id” de los mismos
+- Se desea agregar al primer conjunto el contenido del segundo conjunto de datos si y sólo si el “key” o “id” del segundo conjunto corresponde con el “key” o “id” del primer conjunto de datos. 
+- Parecido al Buscarv y Vlookup de excel
+- Equivalente al Join de Bases de datos
+
+
+
+Creamos un nuevo data.frame
+```{r merge_01a, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+df_6 <- data.frame(A= c('Ana', 'Daniel','Jose'), B= c(100,200,300))
+df_6
+```
+
+
+
+Entendiendo los tipos de Join
+```{r joinvenn, fig.align='center', echo=FALSE, out.width = "400px"}
+   knitr::include_graphics('Images/join-venn.png')
+```
+
+
+
+
+#### Inner Join
+
+El **Inner Join** devuelve sólo los datos de los id que se repiten en ambos conjuntos de datos, en r se utiliza el comando `inner_join` indicando las columnas que se van a utilizar para hacer el match `by = c("Nombre"="A")`
+
+```{r merge_01, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+## Inner join entre df_1 y df_6 uniendo los datos 
+## de cuando [Nombre] en df_1 es igual a [A] en
+df_1 %>% inner_join(df_6, by = c("Nombre"="A")) 
+```
+
+
+#### Left Join
+
+El **Left Join** devuelve todo el conjunto de dato de la tabla de la izquierda mientras que de la tabla derecha sólo se devuelve los datos de los id que coinciden con el primer conjunto de datos (esto es como el buscarv o vlookup de excel)
+
+```{r merge_02, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+df_1 %>% left_join(df_6, by = c("Nombre"="A")) 
+```
+
+
+#### Right Join
+
+El **Right Join** devuelve todo el conjunto de dato de la tabla de la derecha mientras que de la tabla izquierda sólo se devuelve los datos de los id que coinciden con el segundo conjunto de datos.
+
+```{r merge_03, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+df_1 %>% right_join(df_6, by = c("Nombre"="A")) 
+```
+
+
+####  Full Join
+
+**Full Join** devuelve todas los datos sin importar si hay coincidencia o no entre los ids de ambos conjuntos de datos.
+
+```{r merge_04, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+df_1 %>% full_join(df_6, by = c("Nombre"="A")) 
+```
+
+#### Semi join
+semi_join (x, y) da todas las observaciones en x que tienen al menos una coincidencia en y.
+
+```{r merge_05, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+df_1 %>% semi_join(df_6, by = c("Nombre"="A")) 
+```
+
+
+#### Anti join
+anti_join (x, y) da todas las observaciones en x que NO tienen coincidencia en y.
+
+```{r merge_06, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+df_1 %>% anti_join(df_6, by = c("Nombre"="A")) 
+```
+
+
+#### Join usando varias columnas
+
+Se puede tener joins en los que se use más de una columna, por ejemplo
+
+```{r merge_06b, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+df_7 <- data.frame(Name= c('Ana', 'Daniel','Jose', 'Ana'), Age= c(20,19,50, 10), Deuda= c(100,200,300, 110))
+df_1 %>% full_join(df_7, by = c("Nombre"="Name", "Edad"= "Age")) 
+```
+
+#### Base de R
+
+En la base R, se hace los joins usando el comando `merge` 
+```{r merge_06c, eval= FALSE}
+# Inner Join
+merge(x= df_1, y= df_6, by.x= 'Nombre', by.y= 'A')
+# Right Join
+merge(x= df_1, y= df_6, by.x= 'Nombre', by.y= 'A', all.x= TRUE)
+# Left Join
+merge(x= df_1, y= df_6, by.x= 'Nombre', by.y= 'A', all.y= TRUE)
+# Full Join
+merge(x= df_1, y= df_6, by.x= 'Nombre', by.y= 'A', all= TRUE)
+```
+
+
+
+### Más sobre Joins
+
+Vamos a duplicar un valor en df_6 y a replicar los Joins para revisar qué sucede cuando se tiene "key" no únicos. Nótese que el nombre "Ana" ahora tiene dos registros.
+
+```{r merge_07, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+df_6 <- data.frame(A= c('Ana', 'Daniel','Jose', 'Ana'), B= c(100,200,300, 110))
+df_6
+```
+
+Haciendo inner join, se puede ver cómo se ha repetido la información para "Ana"
+```{r merge_08, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+df_1 %>% full_join(df_6, by = c("Nombre"="A")) 
+```
+
+
+Y si repetimos "Ana" en el df_1?
+```{r}
+df_1 %>% 
+  bind_rows( data.frame(Nombre="Ana", Edad= 42, Ciudad= 'Cue')) %>%
+  full_join(df_6, by = c("Nombre"="A")) 
+```
+
+
+**Ejercicio** Haga el left, right y full join, note si se repite el valor de "Ana" (OJO: el df_1 sólo tiene un valor de "Ana" puesto que se hizo bind_rows pero no se asignó eso a df_1)
+
+```{r merge_ex01, exercise.setup= "import_2_set", exercise=TRUE}
+
+
+
+```
+
+
+
+```{r merge_ex01-hint-1, eval=FALSE}
+df_1 %>% left_join(df_6, by = c("Nombre"="A")) 
+df_1 %>% right_join(df_6, by = c("Nombre"="A")) 
+df_1 %>% full_join(df_6, by = c("Nombre"="A")) 
+```
+
+
+
+### Join en nuestro ejercicio
+
+
+Nosotros hemos importado 4 sets de datos (al inicio del tutorial), recordemos que el archivo tenía 4 hojas (modificamos ciertos data.frame): 
+
+* Data_Transacciones: Donde se muestran las transacciones realizadas entre enero y febrero.
+* Data_Clientes: Que contiene edad y sexo del cliente.
+* Data_Locales: Muestra si el local tuvo promotoría en los meses señalados.
+* Data_ContactoCliente: Muestra los números telefónicos de los clientes, en formato vertical como muchos ERP lo muestran y esto lo modificamos para ordenar y que la granularidad sea el cliente.
+
+
+```{r import_3_set, message=FALSE, warning=FALSE, include=FALSE}
+data_transacciones <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                        sheet = "Data_Transacciones", 
+                                        detectDates = TRUE))
+data_clientes <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                   sheet = "Data_Clientes", 
+                                   detectDates = TRUE))
+data_locales <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                  sheet = "Data_Locales", 
+                                  detectDates = TRUE))
+data_contactos <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                    sheet = "Data_ContactoCliente", 
+                                    detectDates = TRUE))
+data_transacciones %<>% mutate(
+  PRODUCTO= str_trim(PRODUCTO),
+  VENTA_USD= parse_number( VENTA_USD, locale = locale(decimal_mark = ",")),  #OPCION 2
+  CALIF_SERVICIO= parse_factor( CALIF_SERVICIO, levels= c('Muy Mala', 'Mala', 'Regular', 'Buena', 'Muy Buena'))
+  )
+
+data_contactos %<>% 
+  spread( key = "TIPO.DE.CONTACTO", value = CONTACTO)
+
+```
+
+
+```{r mergeEj_01, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+str(data_transacciones)
+str(data_clientes)
+str(data_locales)
+str(data_contactos)
+```
+
+¿Qué data.frames se podrían unir y cómo se debería unirlos?   
+* Se puede unir *data_transacciones* con *data_clientes* usando el código de cliente (OJO: para que no se repita el nombre del cliente, debería eliminarse la columna en uno de lo dos data.frame)   
+* Se puede unir *data_transacciones* con *data_locales* usando el nombre del local y el año-mes (OJO: en el data_transacciones no tenemos año y mes, se debería calcular antes de hacer el join)
+* Se puede unir tanto el *data_transacciones* como *data_clientes* con *data_contactos*, en ambos casos se los uniría usando el código de cliente.
+
+
+**Ejercicio** Para nuestro análisis sólo vamos a requerir los dos primeros joins descritos, cree un data.frame llamado data_final, que sea el resultado de unir los objetos *data_transacciones*, *data_clientes* y *data_locales*
+
+
+```{r mergeEj_ex01, exercise.setup= "import_2_set", exercise=TRUE}
+
+
+
+```
+
+
+
+```{r mergeEj_ex01-hint-1, eval=FALSE}
+# 1. Del data_transacciones quitar la columna CLIENTE
+# 2. Hacer left join con data_cliente, usando el COD_CLTE
+# 3. Crear las columnas año y mes para poder hacer join
+# 4. Left join con data_locales, usando local, anio y mes
+data_final <- 
+  data_transacciones %>%
+  ...
+
+```
+
+
+```{r mergeEj_ex01-hint-2, eval=FALSE}
+# 1. Del data_transacciones quitar la columna CLIENTE
+# 2. Hacer left join con data_cliente, usando el COD_CLTE
+# 3. Crear las columnas año y mes para poder hacer join
+# 4. Left join con data_locales, usando local, anio y mes
+data_final <- 
+  data_transacciones %>%
+  select(-CLIENTE) %>% 
+  left_join(data_clientes, by = c("COD_CLTE"="COD_CLTE")) %>%
+  ...
+```
+
+```{r mergeEj_ex01-hint-3, eval=FALSE}
+# 1. Del data_transacciones quitar la columna CLIENTE
+# 2. Hacer left join con data_cliente, usando el COD_CLTE
+# 3. Crear las columnas año y mes para poder hacer join
+# 4. Left join con data_locales, usando local, anio y mes
+data_final <- 
+  data_transacciones %>%
+  select(-CLIENTE) %>% 
+  left_join(data_clientes, by = c("COD_CLTE"="COD_CLTE")) %>%
+  mutate(
+    ANIO= lubridate::year(FECHA_FACTURA),
+    MES= lubridate::month(FECHA_FACTURA)
+    ) %>%
+  left_join(data_locales, by= c("LOCAL"="LOCAL","ANIO"= "ANIO", "MES"="MES"))
+data_final
+```
+
+
+
+```{r import_4_set, message=FALSE, warning=FALSE, include=FALSE}
+data_transacciones <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                        sheet = "Data_Transacciones", 
+                                        detectDates = TRUE))
+data_clientes <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                   sheet = "Data_Clientes", 
+                                   detectDates = TRUE))
+data_locales <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                  sheet = "Data_Locales", 
+                                  detectDates = TRUE))
+data_contactos <- tbl_df( read.xlsx('C:/Tuto_RforDS/datos_licor.xlsx', 
+                                    sheet = "Data_ContactoCliente", 
+                                    detectDates = TRUE))
+data_transacciones %<>% mutate(
+  PRODUCTO= str_trim(PRODUCTO),
+  VENTA_USD= parse_number( VENTA_USD, locale = locale(decimal_mark = ",")),  #OPCION 2
+  CALIF_SERVICIO= parse_factor( CALIF_SERVICIO, levels= c('Muy Mala', 'Mala', 'Regular', 'Buena', 'Muy Buena'))
+  )
+
+data_contactos %<>% 
+  spread( key = "TIPO.DE.CONTACTO", value = CONTACTO)
+
+data_final <- 
+  data_transacciones %>%
+  select(-CLIENTE) %>% 
+  left_join(data_clientes, by = c("COD_CLTE"="COD_CLTE")) %>%
+  mutate(
+    ANIO= lubridate::year(FECHA_FACTURA),
+    MES= lubridate::month(FECHA_FACTURA)
+    ) %>%
+  left_join(data_locales, by= c("LOCAL"="LOCAL","ANIO"= "ANIO", "MES"="MES"))
+```
+
+
+## Transform: Aplicar funciones a columnas
+
+
+
+Con summarise aplicábamos funciones a las columnas, con las funciones del paquete purrr (parte del tidyverse) se extienden dichas carácterísticas
+
+* map() resulta en una lista.
+* map_lgl() devuelve un vector de tipo logical.
+* map_int() devuelve un vector de tipo integer.
+* map_dbl() devuelve un vector de tipo double.
+* map_chr() devuelve un vector de tipo character.
+* map_dfr () y map_dfc () devuelven data.frame creadas por la unión de fila o columna respectivamente.
+
+Por ejemplo:   
+
+**Aplicar una función a las columnas:** Obtener la media de las columnas del data.frame (Nótese el resultado de las columnas no numéricas en el primer caso)
+
+```{r purrr_01, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+# Obtener la media de las columnas del data.frame
+data_final %>% map_dbl(mean)
+# Sólo de las columnas numéricas
+data_final %>% 
+  select_if(is.numeric) %>% 
+  map_dbl(mean)
+```
+
+**Aplicar más de una función a las columnas:** Obtener la media y la mediana de las columnas del data.frame (Nótese que en el resultado no se muestra el nombre del estadístico aplicado)
+
+```{r purrr_02, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+# Obtener la media y la mediana de las columnas del data.frame
+data_final %>% 
+  select_if(is.numeric) %>% 
+  map_dfc( ~c( mean(., na.rm=TRUE), median(.,na.rm=TRUE))) 
+```
+
+
+Ahora se agrega una columna con los nombres del estadístico obtenido
+
+```{r purrr_03, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+# Obtener la media y la mediana de las columnas del data.frame
+data_final %>% 
+  select_if(is.numeric) %>% 
+  map_dfc(~c(mean(., na.rm=TRUE), median(.,na.rm=TRUE))) %>%
+  mutate(Medida = c('Media', 'Mediana'))  
+```
+
+**Combinando con lo aprendido para mejorar el formato del resultado (variables a filas, cálculos a columnas)**
+
+```{r purrr_04, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+# Obtener la media y la mediana de las columnas del data.frame
+data_final %>% 
+  select_if(is.numeric) %>% 
+  map_dfc(~c(mean(., na.rm=TRUE), median(.,na.rm=TRUE))) %>%
+  mutate(Medida = c('Media', 'Mediana'))  %>% 
+  gather(var, val, 1:(ncol(.)-1)) %>%
+  spread(key = Medida, val)
+```
+
+
+Ahora, las funciones map no necesariamente deben devolver un dataframe (como vimos al inicio), la salida puede ser tan variada como el resultado de una prueba de hipótesis; si no sabe qué es una prueba de hipótesis, no se preocupe, lo importante para el ejercicio es saber que una prueba de hipótesis es una técnica estadística cuyo resultado tiene muchas partes. A continuación se va a evaluar para cada sucursal la hipótesis de que el promedio de la venta por línea de factura es menor a 10 dólares, nótese el uso de `split` y `map`.
+
+```{r, eval=FALSE}
+# split nos permite "cortar" el data frame por la variable seleccionada
+# map permite aplicar la función a cada set "cortado"
+# t.test es el comando de la prueba de hipótesis
+data_final %>% 
+  split(.$LOCAL) %>%
+  map(~t.test(.$VENTA_USD, mu = 10, alternative = "less")) 
+```
+
+
+Internamente el resultado es una lista, mientras que en pantalla se muestra una salida formateada como para concluir en función de ello, sin embargo, muchas veces el analista debe mostrar los resultados resumidos, esto podemos hacerlo seleccionando de la lista sólo lo que queremos utilizar (recordar que con el comando `str` se puede ver la estructura de un objeto)  
+
+
+
+Primero veamos la estructura del objeto resultante de una prueba de hipótesis
+
+```{r, eval=FALSE}
+# split nos permite "cortar" el data frame por la variable seleccionada
+# map permite aplicar la función a cada set "cortado"
+# t.test es el comando de la prueba de hipótesis
+pruebahipotesis <- data_final %>% 
+  split(.$LOCAL) %>%
+  map(~t.test(.$VENTA_USD, mu = 10, alternative = "less")) 
+str(pruebahipotesis)
+```
+
+
+Ahora, vamos a aplicar la prueba de hipótesis y vamos a retornar sólo el valor p, la estimación muestral y el valor del estadistico, a esto le agregaremos una columna con el nombre de cada valor seleccionado 
+
+```{r}
+# split nos permite "cortar" el data frame por la variable seleccionada
+# map permite aplicar la función a cada set "cortado"
+# t.test es el comando de la prueba de hipótesis
+# map_dfc y mutate que ya hemos usado
+# dentro del map_dfc lo que se hace es seleccionar los 
+# elementos $p.value, .$estimate, .$statistic de la lista que 
+# resulta del t.test
+
+data_final %>% 
+  split(.$LOCAL) %>%
+  map(~t.test(.$VENTA_USD, mu = 10, alternative = "less")) %>%
+  map_dfc(~c(.$p.value, .$estimate, .$statistic)) %>%
+  mutate( Medida= c("p.value", "estimate", "statistic"))
+```
+
+
+

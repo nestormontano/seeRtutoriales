@@ -1,0 +1,15 @@
+Package: seeRtutoriales
+Type: Package
+Title: Tutoriales para aprender R (¡en español!)
+Version: 0.1.0
+Author: Nestor Montano (Sociedad ecuatoriana de estadistica)
+Maintainer: Nestor Montano P. <nestor.montano@gmail.com>
+Description: Este paquete contiene una serie de tutoriales para aprender R (en español!)
+    Se requiere el uso de learnr::run_tutorial("hello", package = "seeRtutoriales")
+License: GPL-2
+Encoding: UTF-8
+LazyData: true
+Imports:
+    tidyverse,learnr,openxlsx
+Suggests:
+    knitr
