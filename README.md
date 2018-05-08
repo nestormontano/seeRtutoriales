@@ -16,7 +16,7 @@ Se requiere también el uso del paquete learnr, instale learnr mediante: install
 
 Para ejecutar los tutoriales ejecute los comandos indicados
 
-learnr::run_tutorial("1_ManipulacionData", package = "seeRtutoriales")
+`learnr::run_tutorial("1_ManipulacionData", package = "seeRtutoriales")`
 
 
 
