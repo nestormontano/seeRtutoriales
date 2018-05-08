@@ -4,11 +4,12 @@ Este paquete contiene una serie de tutoriales para aprender R ¡todo en español
 
 Este paquete está alojado en gitHub, aún no en CRAN, para instalarlo se requiere tener instalado el paquete `devtools`, puede instalarlo mediante: install.packages("devtools")
 
-Se requiere el uso del paquete learnr, instale learnr mediante: install.packages("learnr")
+Se requiere también el uso del paquete learnr, instale learnr mediante: install.packages("learnr")
 
 
 
-                       Para instalar seeRtutoriales desde GitHub ejecute:  devtools::install_github("sauravkaushik8/SamplePackage")
+                       Para instalar seeRtutoriales desde GitHub ejecute:   
+                       devtools::install_github("nestormontano/seeRtutoriales")
 
 
 ## Tutoriales contenidos:   
@@ -17,3 +18,10 @@ Para ejecutar los tutoriales ejecute los comandos indicados
 
 learnr::run_tutorial("1_ManipulacionData", package = "seeRtutoriales")
 
+
+
+## Mantenimiento y Licenciamiento
+
+El paquete se distribuye bajo licencia Creative Commons CC BY-NC-SA, el código actualizado puede ser descargado actualizado desde https://github.com/nestormontano/seeRtutoriales.
+
+Sugerencias o correcciones puede hacerlas mediante GitHub o via mail a nestor.montano@gmail.com
