@@ -1742,6 +1742,18 @@ data_transacciones %>%
 ## Transform: Unir datos
 
 
+
+El presente tutorial corresponde al curso **Aprendiendo R para Data Science** parte del **Programa de especialización en Data Science**, organizado por la **Sociedad Ecuatoriana de Estadística, SEE**. 
+
+
+```{r ini_s1, echo=FALSE, fig.align='center',  out.width = "400px"}
+   knitr::include_graphics('images/PosterProgDataScienceFB.jpg')
+```
+
+
+Se distribuye bajo licencia Creative Commons CC BY-NC-SA, el código actualizado puede ser descargado actualizado desde el sitio github de Néstor Montaño, miembro de la directiva de la SEE.
+
+
 ### Introducción
 
 EN muchas ocasiones se tiene varios archivos o varios set de datos que deben ser unidos antes de realizar nuestros análisis, en la presente sección vamos a explorar las diferentes alternativas para unir datos.   
@@ -2135,9 +2147,21 @@ data_final <-
 ```
 
 
-## Transform: Aplicar funciones a columnas
+## Aplicar funciones a columnas
 
 
+El presente tutorial corresponde al curso **Aprendiendo R para Data Science** parte del **Programa de especialización en Data Science**, organizado por la **Sociedad Ecuatoriana de Estadística, SEE**. 
+
+
+```{r ini_s1, echo=FALSE, fig.align='center',  out.width = "400px"}
+   knitr::include_graphics('images/PosterProgDataScienceFB.jpg')
+```
+
+
+Se distribuye bajo licencia Creative Commons CC BY-NC-SA, el código actualizado puede ser descargado actualizado desde el sitio github de Néstor Montaño, miembro de la directiva de la SEE.
+
+
+### Introduccion
 
 Con summarise aplicábamos funciones a las columnas, con las funciones del paquete purrr (parte del tidyverse) se extienden dichas carácterísticas
 

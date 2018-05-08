@@ -1,10 +1,10 @@
 # seeRtutoriales
 
-Este paquete contiene una serie de tutoriales para aprender R ¡todo en español!, son desarrollados como parte del **Programa de especialización en Data Science**, organizado por la **Sociedad Ecuatoriana de Estadística, SEE**. 
+Este paquete contiene una serie de tutoriales para aprender R ¡todo en español!, esto fue desarrollado como parte del **Programa de especialización en Data Science** organizado por la **Sociedad Ecuatoriana de Estadística, SEE**. 
 
 Para utilizar este paquete requiere tener instalado R y RStudio.
 
-Este paquete está alojado en gitHub, aún no en CRAN, para instalarlo se requiere tener instalado el paquete `devtools`, utilice `install.packages("devtools")`
+Este paquete está alojado en gitHub, para instalarlo se requiere tener instalado primero el paquete `devtools`, para ello en R ejecute: `install.packages("devtools")`
 
 Se requiere también el uso del paquete learnr, instale learnr mediante: `install.packages("learnr")`
 
