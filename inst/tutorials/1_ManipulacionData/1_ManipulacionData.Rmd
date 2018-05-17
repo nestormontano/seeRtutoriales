@@ -20,7 +20,7 @@ knitr::opts_chunk$set(echo = FALSE)
 El presente tutorial corresponde al curso **Aprendiendo R para Data Science** parte del **Programa de especialización en Data Science**, organizado por la **Sociedad Ecuatoriana de Estadística, SEE**. 
 
 
-```{r ini_s1, echo=FALSE, fig.align='center',  out.width = "400px"}
+```{r ini_s9, echo=FALSE, fig.align='center',  out.width = "400px"}
    knitr::include_graphics('images/PosterProgDataScienceFB.jpg')
 ```
 
@@ -119,7 +119,7 @@ x  # Esto es una Expresion, por tanto que se evalúa y se muestra el resultado (
 El presente tutorial corresponde al curso **Aprendiendo R para Data Science** parte del **Programa de especialización en Data Science**, organizado por la **Sociedad Ecuatoriana de Estadística, SEE**. 
 
 
-```{r ini_s2, fig.align='center', echo=FALSE,  out.width = "400px"}
+```{r ini_s6, fig.align='center', echo=FALSE,  out.width = "400px"}
    knitr::include_graphics('images/PosterProgDataScienceFB.jpg')
 ```
 
@@ -1746,7 +1746,7 @@ data_transacciones %>%
 El presente tutorial corresponde al curso **Aprendiendo R para Data Science** parte del **Programa de especialización en Data Science**, organizado por la **Sociedad Ecuatoriana de Estadística, SEE**. 
 
 
-```{r ini_s1, echo=FALSE, fig.align='center',  out.width = "400px"}
+```{r ini_s7, echo=FALSE, fig.align='center',  out.width = "400px"}
    knitr::include_graphics('images/PosterProgDataScienceFB.jpg')
 ```
 
@@ -2153,7 +2153,7 @@ data_final <-
 El presente tutorial corresponde al curso **Aprendiendo R para Data Science** parte del **Programa de especialización en Data Science**, organizado por la **Sociedad Ecuatoriana de Estadística, SEE**. 
 
 
-```{r ini_s1, echo=FALSE, fig.align='center',  out.width = "400px"}
+```{r ini_s8, echo=FALSE, fig.align='center',  out.width = "400px"}
    knitr::include_graphics('images/PosterProgDataScienceFB.jpg')
 ```
 
