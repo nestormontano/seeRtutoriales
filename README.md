@@ -11,7 +11,9 @@ Puede ver un video explicativo [aquí](https://www.youtube.com/watch?v=1WXgaa2Sp
 
 **2** Este paquete está alojado en gitHub, para instalarlo se requiere tener instalado primero el paquete `devtools`, para ello en R ejecute: `install.packages("devtools")`
 
-**3** Se requiere también el uso del paquete learnr, instale learnr mediante: `install.packages("learnr")`
+**3** Se requiere también el uso del paquete learnr y xtable, instale ambas mediante:     
+- `install.packages("learnr")`    
+- `install.packages("xtable")`    
 
 **4** Instalar el paquete seeRtutoriales:
 
