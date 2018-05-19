@@ -6,8 +6,7 @@ Este paquete contiene una serie de tutoriales para aprender R ¡todo en español
 
 **1.** Para utilizar este paquete requiere tener instalado R y RStudio. El estudiante puede descargar y seguir paso a paso la guía de instalación de R y Rstudio desde [aquí](https://goo.gl/sKH4eY)  
 
-Les presentamos un video explicativo   
-![Instalar R y RStudo](https://www.youtube.com/watch?v=1WXgaa2Spp0)
+Puede ver un video explicativo [aquí](https://www.youtube.com/watch?v=1WXgaa2Spp0)
 
 
 **2** Este paquete está alojado en gitHub, para instalarlo se requiere tener instalado primero el paquete `devtools`, para ello en R ejecute: `install.packages("devtools")`
