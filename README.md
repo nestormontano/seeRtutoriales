@@ -40,10 +40,10 @@ Para ejecutar los tutoriales ejecute los comandos indicados debe usar el comando
 
 #### Contenido
 - Introducción a R
-- Importar y entender datos
-- Manipulacion de datos: Nivel basico
-- Ordenar los datos (Tidy)
-- Unir varios conjuntos de datos
+- Importar y entender datos (openxlsx y otros)
+- Manipulacion de datos: Nivel basico (tidyverse)
+- Ordenar los datos (tidyr)
+- Unir varios conjuntos de datos (joins)
 - Aplicar funciones a columnas (map)
 
 
@@ -55,11 +55,20 @@ En construcción
 
 
 
-
-# Mantenimiento y Licenciamiento
+## Mantenimiento y Licenciamiento
 _____________________________________
 
 
 El paquete se distribuye bajo licencia Creative Commons CC BY-NC-SA, el código actualizado puede ser descargado actualizado desde https://github.com/nestormontano/seeRtutoriales.
 
 Sugerencias o correcciones puede hacerlas mediante GitHub o via mail a nestor.montano@gmail.com
+
+
+
+## Fuentes
+_____________________________________
+
+- Libro [R for Data Science](http://r4ds.had.co.nz/) de Garrett Grolemund y Hadley Wickham
+- [Curso de R] (https://github.com/nestormontano/Curso_R)
+- [Blog personal] (http://blog.espol.edu.ec/nemo/)
+
