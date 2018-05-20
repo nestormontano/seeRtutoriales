@@ -48,13 +48,18 @@ Para ejecutar los tutoriales ejecute los comandos indicados debe usar el comando
 
 
 
-## Mantenimiento y Licenciamiento
-
-El paquete se distribuye bajo licencia Creative Commons CC BY-NC-SA, el código actualizado puede ser descargado actualizado desde https://github.com/nestormontano/seeRtutoriales.
-
-Sugerencias o correcciones puede hacerlas mediante GitHub o via mail a nestor.montano@gmail.com
-
 
 ### Tutorial 2: Limpieza y valores perdidos
 
 En construcción
+
+
+
+
+# Mantenimiento y Licenciamiento
+_____________________________________
+
+
+El paquete se distribuye bajo licencia Creative Commons CC BY-NC-SA, el código actualizado puede ser descargado actualizado desde https://github.com/nestormontano/seeRtutoriales.
+
+Sugerencias o correcciones puede hacerlas mediante GitHub o via mail a nestor.montano@gmail.com
