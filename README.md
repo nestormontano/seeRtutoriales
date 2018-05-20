@@ -25,9 +25,9 @@ Puede ver un video explicativo [aquí](https://www.youtube.com/watch?v=1WXgaa2Sp
 **5** Una vez instalado todo, puede empezar a ejecutar cada tutorial.
 
 
+___________________________
 
 ## Tutoriales contenidos:   
-___________________________
 
 Para ejecutar los tutoriales ejecute los comandos indicados debe usar el comando `learnr::run_tutorial()`
 
@@ -55,8 +55,9 @@ En construcción
 
 
 
-## Mantenimiento y Licenciamiento
 _____________________________________
+## Mantenimiento y Licenciamiento
+
 
 
 El paquete se distribuye bajo licencia Creative Commons CC BY-NC-SA, el código actualizado puede ser descargado actualizado desde https://github.com/nestormontano/seeRtutoriales.
@@ -66,7 +67,7 @@ Sugerencias o correcciones puede hacerlas mediante GitHub o via mail a nestor.mo
 
 
 ## Fuentes
-_____________________________________
+
 
 - Libro [R for Data Science](http://r4ds.had.co.nz/) de Garrett Grolemund y Hadley Wickham
 - [Curso de R] (https://github.com/nestormontano/Curso_R)
