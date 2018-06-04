@@ -169,7 +169,7 @@ Se distribuye bajo licencia Creative Commons CC BY-NC-SA, el código actualizado
 
 ### Importar y entender la data
 
-*Debe tener instalada el paquete openxlsx para esta parte del tutorial*
+*Debe tener instalada los paquetes openxlsx, RCurl y tener acceso a internet para esta parte del tutorial*
 
 Se ha guardado un archivo llamado `datos_licor.xlsx`, en la carpeta `C:/Tuto_RforDS/`. EL archivo consta de 4 hojas: 
 
