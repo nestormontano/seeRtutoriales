@@ -17,7 +17,7 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ## Preeliminares
 
-El presente tutorial corresponde al curso **Aprendiendo R para Data Science** parte del **Programa de especialización en Data Science**, organizado por la **Sociedad Ecuatoriana de Estadística, SEE**. 
+El presente tutorial corresponde al curso **Bases de R para Data Science** parte del **Programa de especialización en Data Science**, organizado por la **Sociedad Ecuatoriana de Estadística, SEE**. 
 
 
 ```{r ini_s9, echo=FALSE, fig.align='center',  out.width = "400px"}
